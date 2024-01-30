@@ -1,45 +1,32 @@
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
 
-provider "aws" {
-  region = var.region
-}
-
-provider "random" {}
-
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+# Configure the Datadog provider
+terraform {
+  required_providers {
+    datadog = {
+      source = "DataDog/datadog"
+    }
   }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
 }
 
-resource "random_pet" "instance" {
-  length = 2
+provider "datadog" {
+  api_url = "https://ap1.datadoghq.com/"
 }
 
-module "ec2-instance" {
-  source = "./modules/aws-ec2-instance"
 
-  ami_id        = data.aws_ami.ubuntu.id
-  instance_name = random_pet.instance.id
+resource "datadog_rum_application" "rum_application" {
+  name = "testing-terradog-nextjs"
+  type = "browser"
 }
 
-module "hello" {
-  source  = "joatmon08/hello/random"
-  version = "4.0.0"
+g
+# resource "datadog_rum_application" "rum_application_flutter" {
+#   name = "testing-terradog-flutter"
+#   type = "flutter"
+# }
 
-  hello        = "World"
-  second_hello = random_pet.instance.id
-
-  secret_key = "secret"
-}
+# resource "datadog_rum_application" "rum_application_react_native" {
+#   name = "testing-terradog-react-native"
+#   type = "react-native"
+# }
