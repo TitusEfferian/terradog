@@ -20,7 +20,7 @@ resource "datadog_rum_application" "rum_application" {
   type = "browser"
 }
 
-g
+
 # resource "datadog_rum_application" "rum_application_flutter" {
 #   name = "testing-terradog-flutter"
 #   type = "flutter"
